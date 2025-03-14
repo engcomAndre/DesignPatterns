@@ -4,7 +4,10 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -14,24 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SingletonTest {
 
-    @Test
+    @ParameterizedTest
     @Order(10)
-    void shouldBeSameInstance() {
-        BasicSingleton instance1 = BasicSingleton.getInstance();
-        BasicSingleton instance2 = BasicSingleton.getInstance();
-
-        BasicSingletonThreadSafe instance3 = BasicSingletonThreadSafe.getInstance();
-        BasicSingletonThreadSafe instance4 = BasicSingletonThreadSafe.getInstance();
-
-        assert (instance1 == instance2);
-        assert (instance3 == instance4);
+    @ValueSource(classes = {BasicSingleton.class, BasicSingletonThreadSafe.class, BasicSingletonThreadSafeOptimized.class, EnumSingleton.class, BasicSingletonEagerLoad.class, BasicSingletonBillPugh.class})
+    void shouldBeSameInstance(Class clazz) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Object instance1 = clazz.getMethod("getInstance").invoke(clazz);
+        Object instance2 =  clazz.getMethod("getInstance").invoke(clazz);
+        assertThat(instance1).isEqualTo(instance2);
     }
 
-    /*
-     * This evaluates the unsafeness of the BasicSingleton implementation the Set instances should have more than one instance of same object
-     * but the expected result is that the Set instances should have only one instance of the same object this is fail because the BasicSingleton is not thread safe
-     * and the getInstance method is not synchronized, so the threads can instantiate more than one instance of the singleton class
-     * */
+
     @Test
     @Order(1)
     void testUnsafenessBasicSingleton() throws InterruptedException {
@@ -66,11 +61,6 @@ class SingletonTest {
         assertThat(instances).hasSizeGreaterThan(1);
     }
 
-    /*
-     * This evaluates the safeness of the BasicSingleton implementation the Set instances should have same instance of same class
-     * but this approach is thread safe, because the getInstance method is synchronized, so the threads can instantiate only one instance of the singleton class
-     * this increase a performance issue, because the synchronized block is a bottleneck
-     * */
     @Test
     @Order(1)
     void testSafenessBasicSingletonThreadSafe() throws InterruptedException {
@@ -118,6 +108,105 @@ class SingletonTest {
                 e.printStackTrace();
             }
             BasicSingletonThreadSafeOptimized instance = BasicSingletonThreadSafeOptimized.getInstance();
+            synchronized (instances) {
+                instances.add(instance);
+            }
+        };
+
+        Thread[] threads = new Thread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = new Thread(task);
+            threads[i].start();
+        }
+
+        latch.countDown(); // Release all threads at the same time
+
+        for (Thread thread : threads) {
+            thread.join();
+        }
+        assertThat(instances).hasSize(1);
+    }
+
+    @Test
+    @Order(1)
+    void testSafenessEnumSingleton() throws InterruptedException {
+        Set<EnumSingleton> instances = new HashSet<>();
+        int threadCount = 1000;
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Runnable task = () -> {
+            try {
+                latch.await(); // Ensures all threads start at the same time
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            EnumSingleton instance = EnumSingleton.INSTANCE;
+            synchronized (instances) {
+                instances.add(instance);
+            }
+        };
+
+        Thread[] threads = new Thread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = new Thread(task);
+            threads[i].start();
+        }
+
+        latch.countDown(); // Release all threads at the same time
+
+        for (Thread thread : threads) {
+            thread.join();
+        }
+        assertThat(instances).hasSize(1);
+    }
+
+    @Test
+    @Order(1)
+    void testSafenessBasicSingletonEagerLoad() throws InterruptedException {
+        Set<BasicSingletonEagerLoad> instances = new HashSet<>();
+        int threadCount = 1000;
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Runnable task = () -> {
+            try {
+                latch.await(); // Ensures all threads start at the same time
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            BasicSingletonEagerLoad instance = BasicSingletonEagerLoad.getInstance();
+            synchronized (instances) {
+                instances.add(instance);
+            }
+        };
+
+        Thread[] threads = new Thread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = new Thread(task);
+            threads[i].start();
+        }
+
+        latch.countDown(); // Release all threads at the same time
+
+        for (Thread thread : threads) {
+            thread.join();
+        }
+        assertThat(instances).hasSize(1);
+    }
+
+    @Test
+    @Order(1)
+    void testSafenessBasicSingletonBillPugh() throws InterruptedException {
+        Set<BasicSingletonBillPugh> instances = new HashSet<>();
+        int threadCount = 1000;
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Runnable task = () -> {
+            try {
+                latch.await(); // Ensures all threads start at the same time
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            BasicSingletonBillPugh instance = BasicSingletonBillPugh.getInstance();
             synchronized (instances) {
                 instances.add(instance);
             }

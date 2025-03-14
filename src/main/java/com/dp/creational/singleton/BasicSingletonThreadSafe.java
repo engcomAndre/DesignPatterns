@@ -4,8 +4,7 @@ import static com.dp.creational.singleton.utils.Utils.configureRacingConditions;
 
 /*
 * This is a simple approach to solve the problem of BasicSingleton.java, this implementation is thread safe, but it has a performance issue,
-* because the synchronized block
-*
+* because the synchronized block is a bottleneck, the threads can instantiate only one instance of the singleton class*
 * */
 public class BasicSingletonThreadSafe {
     private static BasicSingletonThreadSafe instance = null;
