@@ -55,4 +55,42 @@ class SingletonTest {
 
         assertThat(instances).hasSizeGreaterThan(1);
     }
+
+
+    /*
+     * This evaluates the safeness of the BasicSingleton implementation the Set instances should have same instance of same class
+     * but this approach is thread safe, because the getInstance method is synchronized, so the threads can instantiate only one instance of the singleton class
+     * this increase a performance issue, because the synchronized block is a bottleneck
+     * */
+    @Test
+    void testSafenessBasicSingleton() throws InterruptedException {
+        Set<BasicSingletonThreadSafe> instances = new HashSet<>();
+        int threadCount = 1000;
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Runnable task = () -> {
+            try {
+                latch.await(); // Ensures all threads start at the same time
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            BasicSingletonThreadSafe instance = BasicSingletonThreadSafe.getInstance();
+            synchronized (instances) {
+                instances.add(instance);
+            }
+        };
+
+        Thread[] threads = new Thread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = new Thread(task);
+            threads[i].start();
+        }
+
+        latch.countDown(); // Release all threads at the same time
+
+        for (Thread thread : threads) {
+            thread.join();
+        }
+        assertThat(instances).hasSize(1);
+    }
 }
