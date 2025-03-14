@@ -1,5 +1,7 @@
 package com.dp.creational.singleton;
 
+import static com.dp.creational.singleton.utils.Utils.configureRacingConditions;
+
 /*
 * Naive basic implementation of singleton design pattern, provides a one instance of resource, class or object, Spring boot for ex used this pattern to manager beans
 * PS: Not Thread safe implementation, thread can instantiate, more than one instances of the singleton class, this can create a problem in multi-threaded environment
@@ -14,13 +16,10 @@ public class BasicSingleton {
 
     public static BasicSingleton getInstance() {
         if (instance == null) {
-            try {
-                Thread.sleep(10000); // Simulating a delay to increase race condition probability
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            configureRacingConditions();
             instance = new BasicSingleton();
         }
         return instance;
     }
+
 }

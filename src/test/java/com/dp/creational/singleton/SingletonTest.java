@@ -72,8 +72,8 @@ class SingletonTest {
      * this increase a performance issue, because the synchronized block is a bottleneck
      * */
     @Test
-    @Order(10)
-    void testSafenessBasicSingleton() throws InterruptedException {
+    @Order(1)
+    void testSafenessBasicSingletonThreadSafe() throws InterruptedException {
         Set<BasicSingletonThreadSafe> instances = new HashSet<>();
         int threadCount = 1000;
         CountDownLatch latch = new CountDownLatch(1);
@@ -85,6 +85,39 @@ class SingletonTest {
                 e.printStackTrace();
             }
             BasicSingletonThreadSafe instance = BasicSingletonThreadSafe.getInstance();
+            synchronized (instances) {
+                instances.add(instance);
+            }
+        };
+
+        Thread[] threads = new Thread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = new Thread(task);
+            threads[i].start();
+        }
+
+        latch.countDown(); // Release all threads at the same time
+
+        for (Thread thread : threads) {
+            thread.join();
+        }
+        assertThat(instances).hasSize(1);
+    }
+
+    @Test
+    @Order(10)
+    void testSafenessBasicSingletonThreadSafeOptimized() throws InterruptedException {
+        Set<BasicSingletonThreadSafeOptimized> instances = new HashSet<>();
+        int threadCount = 1000;
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Runnable task = () -> {
+            try {
+                latch.await(); // Ensures all threads start at the same time
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            BasicSingletonThreadSafeOptimized instance = BasicSingletonThreadSafeOptimized.getInstance();
             synchronized (instances) {
                 instances.add(instance);
             }
