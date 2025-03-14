@@ -15,7 +15,7 @@ public class BasicSingleton {
     public static BasicSingleton getInstance() {
         if (instance == null) {
             try {
-                Thread.sleep(1000); // Simulating a delay to increase race condition probability
+                Thread.sleep(10000); // Simulating a delay to increase race condition probability
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
