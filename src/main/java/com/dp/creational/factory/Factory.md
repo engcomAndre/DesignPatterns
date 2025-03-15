@@ -91,6 +91,11 @@ public class NotificationService {
     }
 }
 ```
+# Resume
+The factory methods pattern are useful to creation of objects of the similar behavior, can be combined of the singleton, dependency injection
+or others design patterns or even AOP to increases readability and manageability of the code, and the spring boot 
+uses this pattern to create beans and provides use in application context included the personalized manager of desired instances.
+
 
 
 

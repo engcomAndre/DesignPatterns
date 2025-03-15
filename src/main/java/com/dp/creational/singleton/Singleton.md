@@ -190,6 +190,8 @@ exists in the JVM. This pattern help
 day to day systems to manager resources like logs, database connections, beans and has present in the Java world in many
 libraries and frameworks like spring boot, and understand how it works are very usefully. Spring framework default work with the singleton
 pattern no provides injection os managed beans, but if you want different instances of a bean can use @Scope annotation.
+Dependent of scenario, SOLID and YAGNY principles can be not respected decreasing testability and maintainability, in this case
+dependency injection can be appropriated way.
 
 ## Bibliography
 
