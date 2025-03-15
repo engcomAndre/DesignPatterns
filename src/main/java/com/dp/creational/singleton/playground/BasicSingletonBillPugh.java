@@ -1,4 +1,4 @@
-package com.dp.creational.singleton;
+package com.dp.creational.singleton.playground;
 
 /*
  * This implementation is based on the Bill Pugh Singleton Design Pattern, this implementation is thread safe,

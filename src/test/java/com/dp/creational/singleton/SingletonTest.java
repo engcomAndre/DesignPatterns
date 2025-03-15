@@ -1,5 +1,11 @@
 package com.dp.creational.singleton;
 
+import com.dp.creational.singleton.playground.BasicSingleton;
+import com.dp.creational.singleton.playground.BasicSingletonBillPugh;
+import com.dp.creational.singleton.playground.BasicSingletonEagerLoad;
+import com.dp.creational.singleton.playground.BasicSingletonThreadSafe;
+import com.dp.creational.singleton.playground.BasicSingletonThreadSafeOptimized;
+import com.dp.creational.singleton.playground.EnumSingleton;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

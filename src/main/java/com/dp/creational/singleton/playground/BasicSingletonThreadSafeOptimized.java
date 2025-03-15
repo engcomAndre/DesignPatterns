@@ -1,4 +1,4 @@
-package com.dp.creational.singleton;
+package com.dp.creational.singleton.playground;
 
 import static com.dp.creational.singleton.utils.Utils.configureRacingConditions;
 

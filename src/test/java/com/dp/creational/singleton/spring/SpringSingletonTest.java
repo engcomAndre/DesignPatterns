@@ -11,7 +11,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @ContextConfiguration(classes = { BasicSingletonService.class, BasicScopedSingletonService.class })
-class BasicSingletonServiceTest {
+class SpringSingletonTest {
 
     @Nested
     class SameSingletonServiceTest {

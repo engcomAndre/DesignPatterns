@@ -1,4 +1,4 @@
-package com.dp.creational.singleton;
+package com.dp.creational.singleton.playground;
 
 import static com.dp.creational.singleton.utils.Utils.configureRacingConditions;
 
@@ -8,7 +8,7 @@ import static com.dp.creational.singleton.utils.Utils.configureRacingConditions;
 * so it is guaranteed that only one instance will be created before runtime execution, but can be unliked if singleton not used.
 * Recommended in Effective Java by Joshua Bloch
 * */
-enum EnumSingleton {
+public enum EnumSingleton {
     INSTANCE;
 
     EnumSingleton() {    }

@@ -1,6 +1,6 @@
 ## Creation Patterns
 
-This is little personal study and analisys about Singleton Pattern, this pattern is a creational
+This is little personal study and analysis of Singleton Pattern, this pattern is a creational
 pattern, and is used to ensure that a class has only one instance and provides a global point of access to it.
 
 ### Singleton
@@ -160,7 +160,7 @@ and it is recommended to use this implementation because it is thread safe, and 
 block, performance is better than the synchronized block, and it is a lazy loading implementation.
 are a more used implementation in the Java world.
 
-## How Spring Boot works
+## How Singleton works in Spring Boot
 
 Spring boot uses default singleton pattern to manager bean injection, this guarantees same bean usage in the
 application.
