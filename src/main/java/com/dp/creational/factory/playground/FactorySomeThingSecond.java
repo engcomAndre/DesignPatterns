@@ -1,4 +1,4 @@
-package com.dp.creational.playground;
+package com.dp.creational.factory.playground;
 
 
 public class FactorySomeThingSecond implements Factory {

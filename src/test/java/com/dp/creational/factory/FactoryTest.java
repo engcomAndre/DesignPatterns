@@ -1,9 +1,9 @@
 package com.dp.creational.factory;
 
-import com.dp.creational.playground.Factory;
-import com.dp.creational.playground.FactorySomeThingFirst;
-import com.dp.creational.playground.FactorySomeThingSecond;
-import com.dp.creational.playground.ParameterizedFactory;
+import com.dp.creational.factory.playground.Factory;
+import com.dp.creational.factory.playground.FactorySomeThingFirst;
+import com.dp.creational.factory.playground.FactorySomeThingSecond;
+import com.dp.creational.factory.playground.ParameterizedFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

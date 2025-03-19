@@ -1,4 +1,4 @@
-package com.dp.creational.playground;
+package com.dp.creational.factory.playground;
 
 import org.springframework.stereotype.Component;
 
